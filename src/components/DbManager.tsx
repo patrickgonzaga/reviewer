@@ -7,7 +7,7 @@ interface DbManagerProps {
   onAddQuestion: (q: Question) => Promise<void>;
   onDeleteQuestion: (id: string) => Promise<void>;
   onResetDb: () => Promise<void>;
-  onImportDb: (jsonStr: string) => Promise<void>;
+  onImportDb: (jsonStr: string, append?: boolean) => Promise<void>;
   onExportDb: () => Promise<void>;
 }
 
@@ -51,6 +51,9 @@ export default function DbManager({
 
   // Reference for file upload
   const fileInputRef = React.useRef<HTMLInputElement | null>(null);
+
+  // Toggle state to append instead of overwriting on JSON import
+  const [shouldAppend, setShouldAppend] = React.useState(false);
 
   // Filtered List
   const filtered = React.useMemo(() => {
@@ -213,13 +216,22 @@ export default function DbManager({
         // Brief check
         JSON.parse(text);
 
-        const confirm = window.confirm('Importing this JSON will overwrite your active reviewer database questions. Continue?');
-        if (!confirm) return;
+        const confirmMsg = shouldAppend
+          ? 'Importing this JSON will ADD new questions and update existing ones (matching IDs) without clearing the database. Proceed?'
+          : 'Importing this JSON will OVERWRITE your active reviewer database questions (current questions will be deleted). Proceed?';
 
-        await onImportDb(text);
-        alert('Database restored from backup successfully!');
+        const confirm = window.confirm(confirmMsg);
+        if (!confirm) {
+          e.target.value = '';
+          return;
+        }
+
+        await onImportDb(text, shouldAppend);
+        alert(shouldAppend ? 'Questions appended successfully!' : 'Database restored from backup successfully!');
       } catch (err) {
         alert('Failed to parse file. Ensure it is a valid reviewer JSON backup.');
+      } finally {
+        e.target.value = '';
       }
     };
     reader.readAsText(file);
@@ -287,6 +299,29 @@ export default function DbManager({
           <button className="btn btn-secondary" onClick={handleImportClick} title="Restore Database from JSON">
             <Upload size={16} /> Import
           </button>
+
+          <label style={{ 
+            display: 'inline-flex', 
+            alignItems: 'center', 
+            gap: '8px', 
+            fontSize: '13px', 
+            color: 'var(--text-secondary)',
+            cursor: 'pointer',
+            userSelect: 'none',
+            padding: '8px 12px',
+            borderRadius: 'var(--radius-sm)',
+            border: '1px solid var(--border-color)',
+            background: 'rgba(255, 255, 255, 0.01)',
+            transition: 'var(--transition-fast)'
+          }} className="checkbox-append-label">
+            <input 
+              type="checkbox" 
+              checked={shouldAppend}
+              onChange={(e) => setShouldAppend(e.target.checked)}
+              style={{ cursor: 'pointer', accentColor: 'var(--accent-cyan)' }}
+            />
+            <span>Append questions</span>
+          </label>
           
           <input 
             type="file" 
@@ -471,6 +506,7 @@ export default function DbManager({
                       value={formDifficulty}
                       onChange={(e) => setFormDifficulty(e.target.value as Difficulty)}
                     >
+                      <option value="Junior">Junior Developer</option>
                       <option value="Senior">Senior Developer</option>
                       <option value="Lead">Lead Architect</option>
                     </select>

@@ -7,7 +7,7 @@ export type Category =
   | 'AI-First Dev'
   | 'Security';
 
-export type Difficulty = 'Senior' | 'Lead';
+export type Difficulty = 'Junior' | 'Senior' | 'Lead';
 
 export type EvaluationStatus = 'unstarted' | 'mastered' | 'review' | 'struggled';
 

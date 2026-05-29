@@ -235,42 +235,6 @@ options.TypeInfoResolver = TenantJsonContext.Default;`
     });
   });
 
-  // Basic .NET/ASP.NET Core fundamentals
-  list.push({
-    id: 'CNET-00A',
-    category: 'C# / .NET Core',
-    title: 'What is ASP.NET Core?',
-    difficulty: 'Junior',
-    text: 'Explain what ASP.NET Core is, its main features, and why it is used for building modern web applications.'
-  });
-  list.push({
-    id: 'CNET-00B',
-    category: 'C# / .NET Core',
-    title: 'Types of constructors in C#',
-    difficulty: 'Junior',
-    text: 'Describe the different types of constructors available in C# (parameterless, parameterized, copy, static) and typical use cases.'
-  });
-  list.push({
-    id: 'CNET-00C',
-    category: 'C# / .NET Core',
-    title: 'Dependency Injection in ASP.NET Core',
-    difficulty: 'Junior',
-    text: 'What is dependency injection in ASP.NET Core and how is it configured in the Startup/Program class?'
-  });
-  list.push({
-    id: 'CNET-00D',
-    category: 'C# / .NET Core',
-    title: 'Middleware pipeline in ASP.NET Core',
-    difficulty: 'Junior',
-    text: 'Explain how the request middleware pipeline works in ASP.NET Core and how you add custom middleware.'
-  });
-  list.push({
-    id: 'CNET-00E',
-    category: 'C# / .NET Core',
-    title: 'Entity Framework Core basics',
-    difficulty: 'Junior',
-    text: 'What is Entity Framework Core and how do you configure a DbContext for database access?'
-  });
   return list;
 };
 
