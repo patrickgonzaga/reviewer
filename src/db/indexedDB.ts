@@ -210,7 +210,7 @@ export async function exportDatabase(db: IDBDatabase): Promise<string> {
   }, null, 2);
 }
 
-export async function importDatabase(db: IDBDatabase, jsonString: string): Promise<void> {
+export async function importDatabase(db: IDBDatabase, jsonString: string, append: boolean = false): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
       const data = JSON.parse(jsonString);
@@ -224,12 +224,14 @@ export async function importDatabase(db: IDBDatabase, jsonString: string): Promi
       const progressStore = transaction.objectStore('progress');
       const examsStore = transaction.objectStore('exams');
 
-      questionsStore.clear();
-      if (data.clearProgress) {
-        progressStore.clear();
-      }
-      if (data.clearExams) {
-        examsStore.clear();
+      if (!append) {
+        questionsStore.clear();
+        if (data.clearProgress) {
+          progressStore.clear();
+        }
+        if (data.clearExams) {
+          examsStore.clear();
+        }
       }
 
       // Import questions

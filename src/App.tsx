@@ -127,11 +127,11 @@ export default function App() {
   };
 
   // Handler: Import full backup
-  const handleImportDb = async (jsonString: string) => {
+  const handleImportDb = async (jsonString: string, append: boolean = false) => {
     if (!db) return;
     try {
       setLoading(true);
-      await importDatabase(db, jsonString);
+      await importDatabase(db, jsonString, append);
 
       // Reload
       const loadedQuestions = await getAllQuestions(db);

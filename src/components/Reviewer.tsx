@@ -167,7 +167,7 @@ export default function Reviewer({
           <div className="filter-group">
             <span className="filter-label">Target Tier</span>
             <div className="filter-pill-list">
-              {(['All', 'Senior', 'Lead'] as const).map(diff => (
+              {(['All', 'Junior', 'Senior', 'Lead'] as const).map(diff => (
                 <button
                   key={diff}
                   className={`filter-pill ${selectedDifficulty === diff ? 'active' : ''}`}
@@ -265,7 +265,10 @@ export default function Reviewer({
                   <span className={`badge ${getCategoryBadgeClass(currentQuestion.category)}`}>
                     {currentQuestion.category}
                   </span>
-                  <span className={`badge ${currentQuestion.difficulty === 'Lead' ? 'badge-lead' : 'badge-senior'}`}>
+                  <span className={`badge ${
+                    currentQuestion.difficulty === 'Lead' ? 'badge-lead' : 
+                    currentQuestion.difficulty === 'Senior' ? 'badge-senior' : 'badge-junior'
+                  }`}>
                     {currentQuestion.difficulty} Level
                   </span>
                 </div>
